@@ -1,0 +1,10 @@
+# Descripción: Intervalos que se tocan en un punto exacto.
+4
+10,2
+12,2
+14,2
+16,2
+10
+12
+14
+16

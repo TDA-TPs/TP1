@@ -1,0 +1,10 @@
+# Descripción: Intervalos son puntos exactos, cada timestamp coincide perfectamente.
+4
+10,0
+11,0
+12,0
+13,0
+10
+11
+12
+13

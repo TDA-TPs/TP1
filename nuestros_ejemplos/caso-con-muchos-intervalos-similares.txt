@@ -1,0 +1,10 @@
+# Descripción: Múltiples intervalos con centros similares pero diferentes errores.
+4
+10,1
+10,2
+10,3
+10,4
+9
+10
+11
+12

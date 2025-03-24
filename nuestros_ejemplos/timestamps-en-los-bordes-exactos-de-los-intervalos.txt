@@ -1,0 +1,10 @@
+# Descripción: Timestamps exactamente en los límites de los intervalos.
+4
+10,2
+15,3
+20,4
+25,5
+10
+15
+20
+25

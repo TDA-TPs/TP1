@@ -1,0 +1,10 @@
+# Descripción: Un intervalo muy pequeño rodeado de intervalos más grandes.
+4
+10,10
+20,15
+25,1
+30,20
+12
+21
+25
+35

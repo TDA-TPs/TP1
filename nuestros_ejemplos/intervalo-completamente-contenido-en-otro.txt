@@ -1,0 +1,10 @@
+# Descripción: Un intervalo está completamente dentro de otro.
+4
+10,5
+20,10
+15,2
+30,15
+12
+17
+25
+35

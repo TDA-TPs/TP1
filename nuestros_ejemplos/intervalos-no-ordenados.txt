@@ -1,0 +1,10 @@
+# Descripción: Los intervalos originales no están ordenados.
+4
+30,5
+13,2
+20,6
+40,7
+15
+25
+35
+45

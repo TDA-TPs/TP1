@@ -1,0 +1,10 @@
+# Descripción: Grandes intervalos de error, con el último timestamp justo en el límite.
+4
+10,5
+20,10
+30,15
+40,20
+9
+19
+29
+45

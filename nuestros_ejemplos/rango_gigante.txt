@@ -1,0 +1,8 @@
+# Descripción: Transacción con Rango Gigante
+3
+100,50
+10000,10000
+100,45
+60
+150
+1200

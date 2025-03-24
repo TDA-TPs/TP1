@@ -1,0 +1,94 @@
+4-es.txt
+7 --> 7 ± 1
+9 --> 9 ± 3
+11 --> 10 ± 2
+12 --> 11 ± 3
+
+4-es-bis.txt
+7 --> 7 ± 1
+9 --> 9 ± 3
+11 --> 11 ± 3
+12 --> 10 ± 20
+
+4-es-bis-bis.txt
+7 --> 7 ± 1
+9 --> 9 ± 3
+11 --> 11 ± 3
+19 --> 10 ± 20
+
+
+4-no-es.txt, y para todos los archivos con terminación "-no-es.txt":
+No es el sospechoso correcto
+
+rango_gigante.txt
+60 --> 100 ± 45
+150 --> 100 ± 50
+1200 --> 10000 ± 10000
+
+intervalos-coincidentes.txt
+10 --> 10 ± 1
+10 --> 10 ± 1
+10 --> 10 ± 1
+10 --> 10 ± 1
+
+intervalos-minimo-solapamiento.txt
+10 --> 10 ± 0
+11 --> 11 ± 0
+12 --> 12 ± 0
+13 --> 13 ± 0
+
+intervalos-con-grandes-errores.txt
+9 --> 10 ± 5
+19 --> 20 ± 10
+29 --> 30 ± 15
+45 --> 40 ± 20
+
+solapamiento-complejo.txt
+12 --> 10 ± 3
+16 --> 15 ± 4
+22 --> 20 ± 2
+27 --> 25 ± 5
+
+intervalo-completamente-contenido-en-otro.txt
+12 --> 10 ± 5
+17 --> 15 ± 2 
+25 --> 20 ± 10 
+35 --> 30 ± 15
+
+timestamps-en-los-bordes-exactos-de-los-intervalos.txt
+10 --> 10 ± 2
+15 --> 15 ± 3
+20 --> 20 ± 4
+25 --> 25 ± 5
+
+caso-con-muchos-intervalos-similares.txt
+9 --> 10 ± 1
+10 --> 10 ± 2
+11 --> 10 ± 3
+12 --> 10 ± 4
+
+intervalos-no-ordenados.txt
+15 --> 13 ± 2
+25 --> 20 ± 6
+35 --> 30 ± 5
+45 --> 40 ± 7
+
+intervalo-muy-pequeno-entre-otros-grandes.txt
+12 --> 10 ± 10
+21 --> 20 ± 15
+25 --> 25 ± 1
+35 --> 30 ± 20
+
+intervalos-que-se-tocan-en-un-punto.txt
+10 --> 10 ± 2
+12 --> 12 ± 2
+14 --> 14 ± 2
+16 --> 16 ± 2
+
+errores-asimetricos.txt
+11 --> 10 ± 1
+16 --> 15 ± 3
+21 --> 20 ± 2
+26 --> 25 ± 4
+
+

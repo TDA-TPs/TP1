@@ -1,0 +1,10 @@
+# Descripción: Intervalos con errores de diferentes magnitudes.
+4
+10,1
+15,3
+20,2
+25,4
+11
+16
+21
+26
