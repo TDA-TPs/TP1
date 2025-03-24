@@ -1,6 +1,7 @@
 import heapq
 import sys
 
+NOT_THE_SUSPECT = "No es el sospechoso correcto"
 
 def tie_break_candidates(transactions_candidates):
     first_to_finish = transactions_candidates[0][2]
@@ -31,12 +32,12 @@ def check_suspicius_transactions(n, transactions_with_error, suspicious_transact
     
     # O(n)
     heapq.heapify(heap_of_transactions_with_error)
-    print("Heap of transactions with error:", heap_of_transactions_with_error)
+    # print("Heap of transactions with error:", heap_of_transactions_with_error)
 
     # O(n)
     for i in range(n):
         actual_suspicious_transaction = suspicious_transactions[i]
-        print("Actual suspicious transaction: ", actual_suspicious_transaction)
+        # print("Actual suspicious transaction: ", actual_suspicious_transaction)
         has_more_candidates = True
         # Change to use a heap of minimum end time
         transactions_candidates = []
@@ -51,15 +52,15 @@ def check_suspicius_transactions(n, transactions_with_error, suspicious_transact
             transactions_candidates.append(actual_transaction)
 
         if not transactions_candidates:
-            return "No es el sospechoso correcto"
-        print("Transactions candidates: ", transactions_candidates)
+            return NOT_THE_SUSPECT
+        # print("Transactions candidates: ", transactions_candidates)
         # O(n)
         final_candidate, index = tie_break_candidates(transactions_candidates)
-        res.append(final_candidate)
-        print("Final candidate: ", final_candidate)
+        res.append((actual_suspicious_transaction, final_candidate))
+        # print("Final candidate: ", final_candidate)
         # O(n)
         re_push_candidates(heap_of_transactions_with_error, transactions_candidates, index)
-        print("Heap after re-pushing: ", heap_of_transactions_with_error)
+        # print("Heap after re-pushing: ", heap_of_transactions_with_error)
     return res
 
 
@@ -75,7 +76,6 @@ def read_and_process_file(file_path):
     Note: Lines starting with # are treated as comments and skipped
     """
     with open(file_path, 'r') as file:
-        # Read all lines and filter out comments
         lines = [line.strip() for line in file.readlines() if not line.strip().startswith('#')]
         
         n = int(lines[0])
@@ -89,19 +89,31 @@ def read_and_process_file(file_path):
         for i in range(n+1, 2*n+1):
             suspicious_transactions.append(int(lines[i]))
         
-        print(f"Processing {n} transactions...")
-        print(f"Transactions with error: {transactions_with_error}")
-        print(f"Suspicious transactions: {suspicious_transactions}")
+        # print(f"Processing {n} transactions...")
+        # print(f"Transactions with error: {transactions_with_error}")
+        # print(f"Suspicious transactions: {suspicious_transactions}")
         
         result = check_suspicius_transactions(n, transactions_with_error, suspicious_transactions)
         return result
+    
+def format_result(result):
+    if result == NOT_THE_SUSPECT:
+        return NOT_THE_SUSPECT
+    
+    formatted_lines = []
+    for suspicious_timestamp, transaction in result:
+        timestamp, error = transaction
+        formatted_lines.append(f"{suspicious_timestamp} --> {timestamp} ± {error}")
+    
+    return "\n".join(formatted_lines)
 
 if __name__ == "__main__":
 
     if len(sys.argv) > 1:
         file_path = sys.argv[1]
         result = read_and_process_file(file_path)
-        print("Result:", result)
+        formatted_result = format_result(result)
+        print(formatted_result)
     else:
         print("Please provide a file path as an argument")
         print("Example: python3 tp1.py route/to/file.txt")
