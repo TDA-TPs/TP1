@@ -1,0 +1,121 @@
+import heapq
+import sys
+
+
+def tie_break_candidates(transactions_candidates):
+    first_to_finish = transactions_candidates[0][2]
+    index = 0
+    for i in range(len(transactions_candidates)):
+        actual_transaction_finish_time = transactions_candidates[i][2]
+        if actual_transaction_finish_time < first_to_finish:
+            first_to_finish = actual_transaction_finish_time
+            index = i
+    return transactions_candidates[index][3], index
+
+def re_push_candidates(heap_of_transactions_with_error, transactions_candidates, index):
+    for i in range(len(transactions_candidates)):
+        if i != index:
+            heapq.heappush(heap_of_transactions_with_error, transactions_candidates[i])
+                      
+def suspicious_transaction_is_in_range(suspicious_transaction, transaction_candidate):
+    if transaction_candidate[0] <= suspicious_transaction and transaction_candidate[2] >= suspicious_transaction:
+        return True
+    return False
+
+
+def check_suspicius_transactions(n, transactions_with_error, suspicious_transactions):
+    res = []
+
+    # O(n)
+    heap_of_transactions_with_error = [(t[0] - t[1] if t[0] - t[1] > 0 else 0, t[0], t[0] + t[1], t) for t in transactions_with_error] # (ti - ei, ti, ti + ei, t)
+    
+    # O(n)
+    heapq.heapify(heap_of_transactions_with_error)
+    print("Heap of transactions with error:", heap_of_transactions_with_error)
+
+    # O(n)
+    for i in range(n):
+        actual_suspicious_transaction = suspicious_transactions[i]
+        print("Actual suspicious transaction: ", actual_suspicious_transaction)
+        has_more_candidates = True
+        # Change to use a heap of minimum end time
+        transactions_candidates = []
+        # O(n)
+        while has_more_candidates and heap_of_transactions_with_error:
+            # O(log(n))
+            actual_transaction = heapq.heappop(heap_of_transactions_with_error)
+            if not suspicious_transaction_is_in_range(actual_suspicious_transaction, actual_transaction):
+                # O(log(n))
+                heapq.heappush(heap_of_transactions_with_error, actual_transaction)
+                break
+            transactions_candidates.append(actual_transaction)
+
+        if not transactions_candidates:
+            return "No es el sospechoso correcto"
+        print("Transactions candidates: ", transactions_candidates)
+        # O(n)
+        final_candidate, index = tie_break_candidates(transactions_candidates)
+        res.append(final_candidate)
+        print("Final candidate: ", final_candidate)
+        # O(n)
+        re_push_candidates(heap_of_transactions_with_error, transactions_candidates, index)
+        print("Heap after re-pushing: ", heap_of_transactions_with_error)
+    return res
+
+
+def read_and_process_file(file_path):
+    """
+    Reads input from a file and processes transactions
+    
+    Format:
+    - First line: n (number of transactions)
+    - Next n lines: timestamp,error for transactions_with_error
+    - Next n lines: suspicious transaction timestamps
+    
+    Note: Lines starting with # are treated as comments and skipped
+    """
+    with open(file_path, 'r') as file:
+        # Read all lines and filter out comments
+        lines = [line.strip() for line in file.readlines() if not line.strip().startswith('#')]
+        
+        n = int(lines[0])
+        
+        transactions_with_error = []
+        for i in range(1, n+1):
+            timestamp, error = lines[i].split(',')
+            transactions_with_error.append([int(timestamp), int(error)])
+        
+        suspicious_transactions = []
+        for i in range(n+1, 2*n+1):
+            suspicious_transactions.append(int(lines[i]))
+        
+        print(f"Processing {n} transactions...")
+        print(f"Transactions with error: {transactions_with_error}")
+        print(f"Suspicious transactions: {suspicious_transactions}")
+        
+        result = check_suspicius_transactions(n, transactions_with_error, suspicious_transactions)
+        return result
+
+if __name__ == "__main__":
+
+    if len(sys.argv) > 1:
+        file_path = sys.argv[1]
+        result = read_and_process_file(file_path)
+        print("Result:", result)
+    else:
+        print("Please provide a file path as an argument")
+        print("Example: python3 tp1.py route/to/file.txt")
+
+"""
+The algorithm is greedy because it follows this approach:
+For each suspicious transaction it:
+Picks the candidate transaction whose start time (ti - ei) is the smallest of all, that is, the first available transaction.
+Then, if the suspicious transaction is in the range of the candidate transaction, it is added to the list of candidates. If it is not, the candidate is re-pushed to the heap (and it does not check for further candidates because we decided to use a heap of minimum start time).
+Finally, it tie breaks the candidates by choosing the one has the smallest finish time (ti + ei), adds it to the result list and re-pushies the remaining candidates back to the heap.
+By choosing the local optimal solution (the first available transaction) we reach the global optimal solution.
+"""
+
+"""
+Time complexity:
+O(n) + O(n) + (O(n) * ( (  O(n) * (   log(n) + log(n)   )  ) + O(n) + O(n) )) = O(n) + (O(n) * (O(n) * log(n))) = O(n) + O(n^2 * log(n)) = O(n^2 * log(n)) 
+"""
