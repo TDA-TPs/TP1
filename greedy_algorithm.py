@@ -4,19 +4,26 @@ import sys
 NOT_THE_SUSPECT = "No es el sospechoso correcto"
 
 def tie_break_candidates(transactions_candidates):
-    first_to_finish = transactions_candidates[0][2]
-    index = 0
+    '''
+    Given a list of transactions candidates, it returns the one with the smallest finish time
+
+    Args:
+        - transactions_candidates: list of tuples (transaction, index).
+    E.g. [((1, 2, 3, (2, 1)), 0), ((2, 3, 4, (2, 1)), 1), ...]
+
+    Returns:
+        - The transaction with the smallest finish time and its index.
+    E.g. ((1, 2, 3, (2, 1)), 0)
+    '''
+    first_to_finish = transactions_candidates[0][0][2]
+    first_to_finish_transaction = transactions_candidates[0]
     for i in range(len(transactions_candidates)):
-        actual_transaction_finish_time = transactions_candidates[i][2]
+        actual_transaction_finish_time = transactions_candidates[i][0][2]
         if actual_transaction_finish_time < first_to_finish:
             first_to_finish = actual_transaction_finish_time
-            index = i
-    return transactions_candidates[index][3], index
+            first_to_finish_transaction = transactions_candidates[i]
+    return first_to_finish_transaction[0][3], first_to_finish_transaction[1]
 
-def re_push_candidates(heap_of_transactions_with_error, transactions_candidates, index):
-    for i in range(len(transactions_candidates)):
-        if i != index:
-            heapq.heappush(heap_of_transactions_with_error, transactions_candidates[i])
                       
 def suspicious_transaction_is_in_range(suspicious_transaction, transaction_candidate):
     if transaction_candidate[0] <= suspicious_transaction and transaction_candidate[2] >= suspicious_transaction:
@@ -28,28 +35,23 @@ def check_suspicius_transactions(n, transactions_with_error, suspicious_transact
     res = []
 
     # O(n)
-    heap_of_transactions_with_error = [(t[0] - t[1] if t[0] - t[1] > 0 else 0, t[0], t[0] + t[1], t) for t in transactions_with_error] # (ti - ei, ti, ti + ei, t)
+    transactions_with_error = [(t[0] - t[1] if t[0] - t[1] > 0 else 0, t[0], t[0] + t[1], t) for t in transactions_with_error]  # (ti - ei, ti, ti + ei, t)
     
-    # O(n)
-    heapq.heapify(heap_of_transactions_with_error)
-    # print("Heap of transactions with error:", heap_of_transactions_with_error)
+    # Sort transactions by start time (ti - ei)
+    # O(n log n)
+    transactions_with_error.sort(key=lambda x: x[0])
 
     # O(n)
     for i in range(n):
         actual_suspicious_transaction = suspicious_transactions[i]
         # print("Actual suspicious transaction: ", actual_suspicious_transaction)
-        has_more_candidates = True
         # Change to use a heap of minimum end time
         transactions_candidates = []
         # O(n)
-        while has_more_candidates and heap_of_transactions_with_error:
-            # O(log(n))
-            actual_transaction = heapq.heappop(heap_of_transactions_with_error)
-            if not suspicious_transaction_is_in_range(actual_suspicious_transaction, actual_transaction):
-                # O(log(n))
-                heapq.heappush(heap_of_transactions_with_error, actual_transaction)
-                break
-            transactions_candidates.append(actual_transaction)
+        for i in range(len(transactions_with_error)):
+            actual_transaction = transactions_with_error[i]
+            if suspicious_transaction_is_in_range(actual_suspicious_transaction, actual_transaction):
+                transactions_candidates.append((actual_transaction, i))
 
         if not transactions_candidates:
             return NOT_THE_SUSPECT
@@ -59,8 +61,7 @@ def check_suspicius_transactions(n, transactions_with_error, suspicious_transact
         res.append((actual_suspicious_transaction, final_candidate))
         # print("Final candidate: ", final_candidate)
         # O(n)
-        re_push_candidates(heap_of_transactions_with_error, transactions_candidates, index)
-        # print("Heap after re-pushing: ", heap_of_transactions_with_error)
+        transactions_with_error = [t for i, t in enumerate(transactions_with_error) if i != index]
     return res
 
 
