@@ -45,7 +45,6 @@ def check_suspicius_transactions(n, transactions_with_error, suspicious_transact
     for i in range(n):
         actual_suspicious_transaction = suspicious_transactions[i]
         # print("Actual suspicious transaction: ", actual_suspicious_transaction)
-        # Change to use a heap of minimum end time
         transactions_candidates = []
         # O(n)
         for i in range(len(transactions_with_error)):
@@ -130,5 +129,5 @@ By choosing the local optimal solution (the first available transaction) we reac
 
 """
 Time complexity:
-O(n) + O(n) + (O(n) * ( (  O(n) * (   log(n) + log(n)   )  ) + O(n) + O(n) )) = O(n) + (O(n) * (O(n) * log(n))) = O(n) + O(n^2 * log(n)) = O(n^2 * log(n)) 
+O(n) + O(n log n) + (O(n) * ( O(n) + O(n) + O(n) )) = O(n) + (O(n) * (O(n))) - O(n) + O(n^2) = O(n^2) 
 """

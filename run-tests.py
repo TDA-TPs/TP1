@@ -91,11 +91,11 @@ def main():
     if len(sys.argv) != 2:
         print("Usage: python run-tests.py <folder_path>")
         print("Example: python run-tests.py ./examples_catedra")
-        print("Remember to have the greedy_algorithm.py file in the same directory and run the test while being in the folder that contains it.")
+        print("Remember to have the tp1.py file in the same directory and run the test while being in the folder that contains it.")
         sys.exit(1)
     
     folder_path = sys.argv[1]
-    greedy_algorithm_path = "./greedy_algorithm.py"
+    greedy_algorithm_path = "./tp1.py"
     report_file_path = "test_report.txt"
     validation_report_path = "validation_report.txt"
     
